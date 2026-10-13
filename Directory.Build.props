@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Deterministic>true</Deterministic>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <NuGetLockFilePath Condition="'$(PublishSingleFile)' == 'true'">$(MSBuildProjectDirectory)/packages.publish.lock.json</NuGetLockFilePath>
+  </PropertyGroup>
+</Project>
