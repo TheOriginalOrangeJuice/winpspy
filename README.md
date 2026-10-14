@@ -25,15 +25,13 @@ winpspy reduces console spam by grouping and summarizing activity:
 
 ## How to Run
 
-Download [winpspy.exe](https://github.com/TheOriginalOrangeJuice/winpspy/releases/latest/download/winpspy.exe) for x64 Windows. No .NET installation is required.
+Download [winpspy.exe](https://github.com/TheOriginalOrangeJuice/winpspy/releases/latest/download/winpspy.exe) for x64 Windows. 
 
 To build from source, use .NET SDK 10.0.401:
 
 ```powershell
-dotnet publish src/winpspy/winpspy.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=None -p:DebugSymbols=false -p:RestoreLockedMode=true -o extras/artifacts/publish/win-x64
+dotnet publish src/winpspy/winpspy.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=None -p:DebugSymbols=false -p:RestoreLockedMode=true -o /tmp
 ```
-
-The executable is saved to `extras/artifacts/publish/win-x64/winpspy.exe`.
 
 Open an **elevated PowerShell terminal** and run `winpspy.exe`, optionally with the following flags:
 
