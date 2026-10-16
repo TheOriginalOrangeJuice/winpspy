@@ -89,8 +89,12 @@ internal sealed class ProcessEnricher(EventPipeline pipeline) : IAsyncDisposable
         catch (Exception ex) when (ex is ManagementException or UnauthorizedAccessException or System.Runtime.InteropServices.COMException)
         { pipeline.Report("process-snapshot", "degraded", ex.Message); }
     });
-    public void Report() => pipeline.Report("enrichment", "active", "Cumulative asynchronous process enrichment counts.",
-        new Dictionary<string,long> { ["unavailableOrPartial"] = Interlocked.Read(ref unavailable), ["queueDrops"] = Interlocked.Read(ref dropped) });
+    public void Report()
+    {
+        long partial = Interlocked.Read(ref unavailable), drops = Interlocked.Read(ref dropped);
+        pipeline.Report("enrichment", partial > 0 || drops > 0 ? "degraded" : "active", "Cumulative asynchronous process enrichment counts.",
+            new Dictionary<string,long> { ["unavailableOrPartial"] = partial, ["queueDrops"] = drops });
+    }
     public async ValueTask DisposeAsync()
     {
         requests.Writer.TryComplete();

@@ -84,24 +84,27 @@ public sealed class Options
         return o;
     }
     public const string Usage = """
-    winpspy 2.0 - live Windows activity monitor (based on xct/winpspy)
+    winpspy 2.0.1 - live Windows activity monitor (based on xct/winpspy)
     Usage: winpspy.exe [directories...] [options]
       --path DIR              Add a file collection root; default: all local fixed drives
       --recursive             Include subdirectories (default)
       --recursive=false       Only direct children of each root
       --events LIST           process,file,network,dns,registry,service,task,powershell,pipe
                               Default: all except sampled pipes; 'all' includes pipes
+                              Health status, warnings and summaries remain visible
       --pid PID[,PID]         Filter console by process ID
       --follow-children       Follow those process instances and their descendants
-      --process GLOB          Filter console by image name or full image path (repeatable)
-      --user GLOB             Filter console by account or SID (repeatable)
-      --include GLOB          Include console paths/key names (repeatable)
-      --exclude GLOB          Exclude console paths/key names (repeatable)
+      --process PATTERN       Filter console by image name or full image path (repeatable)
+      --user PATTERN          Filter console by account or SID (repeatable)
+      --include PATTERN       Include console paths/key names (repeatable)
+      --exclude TEXT/PATTERN  Exclude console text, including commands (repeatable)
+                              Plain text: substring; * and ?: full-value wildcards
       --contains TEXT         Case-insensitive console text search
       --output FILE           Save individual events; no file is created by default
       --format jsonl|text     Export format (default: jsonl); rotate at 100 MiB
       --raw                   Disable console write grouping and burst summaries
       --verbose               Include file opens/reads, registry queries, enrichment updates
+                              Also show periodic healthy collection counters
       --no-color              Plain text (automatic when redirected)
       --duration SECONDS      Stop and flush after this duration
       --check                 Report capabilities without collecting or changing settings

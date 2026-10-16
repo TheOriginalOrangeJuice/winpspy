@@ -43,7 +43,10 @@ public sealed class ConsoleFilter(Options options)
     }
     public bool Matches(ActivityEvent e)
     {
-        if (e.Category == Category.Health) return true;
+        // Keep session/coverage messages visible, but leave periodic healthy counters
+        // in the capture unless verbose console output was requested.
+        if (e.Category == Category.Health)
+            return options.Verbose || e.Details.Health is not { State: "active", Counts: not null };
         // With a user filter, the launch may precede account lookup. Show the
         // matching enrichment record with the original launch command when it arrives.
         if (e.Kind == "process.enriched" && !options.Verbose && options.Users.Count == 0) return false;
@@ -65,7 +68,17 @@ public sealed class ConsoleFilter(Options options)
         string?[] paths = [e.Details.File?.Path, e.Details.File?.OldPath, e.Details.Registry?.Key,
             e.Details.Script?.Path, e.Details.Log?.Name, e.Details.Pipe, image];
         if (options.Includes.Count > 0 && !options.Includes.Any(x => paths.Any(p => WindowsPaths.Glob(x, p)))) return false;
-        if (options.Excludes.Any(x => paths.Any(p => WindowsPaths.Glob(x, p)))) return false;
-        return options.Contains == null || TimelineFormatter.Plain(e).Contains(options.Contains, StringComparison.OrdinalIgnoreCase);
+        string? entryText = null;
+        string Text() => entryText ??= TimelineFormatter.Plain(e);
+        foreach (string pattern in options.Excludes)
+        {
+            bool wildcard = pattern.IndexOfAny(['*', '?']) >= 0;
+            bool Match(string? value) => wildcard ? WindowsPaths.Glob(pattern, value) :
+                value?.Contains(pattern, StringComparison.OrdinalIgnoreCase) == true;
+            if (paths.Any(Match) ||
+                (e.Kind is "process.start" or "process.snapshot" or "process.enriched" &&
+                    Match(e.Process?.CommandLine ?? e.Details.Process?.CommandLine)) || Match(Text())) return false;
+        }
+        return options.Contains == null || Text().Contains(options.Contains, StringComparison.OrdinalIgnoreCase);
     }
 }

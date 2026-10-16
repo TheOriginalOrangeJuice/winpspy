@@ -56,6 +56,7 @@ Open an **elevated PowerShell terminal** and run `winpspy.exe`, optionally with 
 
 - Ctrl+C stops collection.
 - Without `--output`, winpspy does not create a capture file.
+- `[HEALTH]` status, warnings, and console summaries remain visible with any `--events` selection. Routine healthy counters appear only with `--verbose`; captures retain all health records.
 
 These filters affect the console, not saved captures. Exclusions also match file paths and other names.
 
@@ -67,12 +68,13 @@ These filters affect the console, not saved captures. Exclusions also match file
 | `--pid PID[,PID]` | Console PID filter. |
 | `--follow-children` | Follow the first observed selected process instances and their descendants in the console. Requires `--pid`. |
 | `--process PATTERN` / `--user PATTERN` | Console image-name/full-path or account/SID filter; repeatable. |
-| `--include PATTERN` / `--exclude PATTERN` | Console path/key/name filters; either rename endpoint can match. Exclusions take precedence. |
+| `--include PATTERN` | Console path/key/name filter; either rename endpoint can match. |
+| `--exclude TEXT/PATTERN` | Exclude matching console entries, including command lines. Plain text matches substrings; wildcards match a full path/name, command line, or entry. Repeatable; exclusions take precedence. |
 | `--contains TEXT` | Case-insensitive console text search. |
 | `--output FILE` | Optional evidence file. |
 | `--format jsonl\|text` | Evidence format; JSONL is the default. |
 | `--raw` | Ungrouped, unthrottled console entries. |
-| `--verbose` | Also collect file opens/reads and registry queries. Can generate substantial volume. |
+| `--verbose` | Also collect file opens/reads and registry queries, and show periodic healthy counters. Can generate substantial volume. |
 | `--no-color` | Plain text. |
 | `--duration SECONDS` | Stop automatically (maximum 7 days). |
 | `--check` / `--help` | Capability report / usage. |
@@ -80,6 +82,12 @@ These filters affect the console, not saved captures. Exclusions also match file
 ## Example
 
 `PATTERN` supports wildcards: `*` matches any number of characters and `?` matches one character. Matching is case-insensitive; for example, `--process "*powershell*"`.
+
+To hide entries containing a word, including in command lines:
+
+```powershell
+.\winpspy.exe --events process,file --exclude "Convergence"
+```
 
 Repeat a flag to select or exclude multiple applications:
 

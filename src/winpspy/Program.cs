@@ -21,7 +21,7 @@ internal static class Program
         if (options.Paths.Count == 0 && options.Events.Contains(Category.File)) { Console.Error.WriteLine("No local fixed drives found. Supply --path."); return 2; }
         foreach (string path in options.Paths)
             if (!Directory.Exists(path)) { Console.Error.WriteLine("Collection directory does not exist or is inaccessible: " + path); return 2; }
-        Console.Error.WriteLine("winpspy 2.0 | activity colors, no threat classification | Ctrl+C to stop");
+        Console.Error.WriteLine("winpspy 2.0.1 | activity colors, no threat classification | Ctrl+C to stop");
         Console.Error.WriteLine("File roots: " + string.Join(", ", options.Paths.Select(TimelineFormatter.Escape)));
         Console.Error.WriteLine("Collection: " + string.Join(", ", options.Events) + ". Other filters affect console only.");
         using var stop = new CancellationTokenSource();
@@ -81,7 +81,7 @@ internal static class Program
     }
     private static int Check(Options options)
     {
-        Console.WriteLine($"winpspy 2.0 | {Environment.OSVersion} | {System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture}");
+        Console.WriteLine($"winpspy 2.0.1 | {Environment.OSVersion} | {System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture}");
         Console.WriteLine("Elevation: " + (IsElevated() ? "administrator" : "not elevated; monitoring requires administrator"));
         foreach (string name in new[] { "Microsoft-Windows-Kernel-Process", "Microsoft-Windows-Kernel-File", "Microsoft-Windows-Kernel-Registry", "Microsoft-Windows-DNS-Client" })
         {
