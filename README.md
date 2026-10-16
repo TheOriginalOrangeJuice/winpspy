@@ -56,7 +56,6 @@ Open an **elevated PowerShell terminal** and run `winpspy.exe`, optionally with 
 
 - Ctrl+C stops collection.
 - Without `--output`, winpspy does not create a capture file.
-- `[HEALTH]` status, warnings, and console summaries remain visible with any `--events` selection. Routine healthy counters appear only with `--verbose`; captures retain all health records.
 
 These filters affect the console, not saved captures. Exclusions also match file paths and other names.
 
@@ -74,7 +73,7 @@ These filters affect the console, not saved captures. Exclusions also match file
 | `--output FILE` | Optional evidence file. |
 | `--format jsonl\|text` | Evidence format; JSONL is the default. |
 | `--raw` | Ungrouped, unthrottled console entries. |
-| `--verbose` | Also collect file opens/reads and registry queries, and show periodic healthy counters. Can generate substantial volume. |
+| `--verbose` | Also collect file opens/reads and registry queries. Can generate substantial volume. |
 | `--no-color` | Plain text. |
 | `--duration SECONDS` | Stop automatically (maximum 7 days). |
 | `--check` / `--help` | Capability report / usage. |
